@@ -1,0 +1,94 @@
+html, body { margin: 0; padding: 0; font-family: 'Inter', system-ui, sans-serif; color: #0f172a; background: #f6f8fc; }
+.auth-page { min-height: 100vh; display: grid; place-items: center; background: linear-gradient(180deg, #f6f8fc, #eef2f8); }
+.auth-card { width: min(820px, 94vw); background: #ffffff; border-radius: 16px; box-shadow: 0 18px 40px rgba(0,0,0,0.12); padding: 28px 24px; border: 1px solid rgba(0,0,0,0.06); color: #0f172a; }
+.auth-title { margin: 0 0 6px; font-size: 1.6rem; }
+.text-display { padding: 10px 12px; background: #fff; border: 1px solid rgba(0,0,0,0.12); border-radius: 10px; }
+.auth-sub { margin: 0 0 18px; color: #555; }
+.field { display: flex; flex-direction: column; gap: 6px; margin: 10px 0 14px; }
+.field label { font-size: 0.95rem; color: #0f172a; }
+.field input[type="text"], .field input[type="password"] { padding: 10px 12px; font-size: 1rem; border-radius: 10px; border: 1px solid rgba(15,23,42,0.12); background: #ffffff; color: #0f172a; }
+.field input::placeholder { color: #475569; opacity: 0.9; }
+.btn.primary { background: hsl(210, 85%, 45%); color: #fff; border: none; }
+.btn { display: inline-block; padding: 10px 16px; border-radius: 10px; text-decoration: none; border: 1px solid rgba(0,0,0,0.12); background: #ffffff; cursor: pointer; color: #0f172a; }
+.btn:hover { background: #f3f5f7; }
+.auth-views { position: relative; }
+.profile-grid { display: grid; grid-template-columns: 1fr 240px; gap: 18px; align-items: start; }
+.avatar-wrap { display: grid; place-items: center; gap: 10px; }
+#profile-avatar { width: 200px; height: 200px; border-radius: 12px; object-fit: cover; background: #e9edf3; border: 1px solid rgba(0,0,0,0.08); box-shadow: 0 10px 24px rgba(0,0,0,0.12); }
+.actions { display: flex; gap: 10px; }
+
+/* ===== АДАПТИВНОСТЬ ===== */
+
+/* Планшеты */
+@media (max-width: 1024px) {
+    .auth-card {
+      width: 94vw;
+      padding: 24px 20px;
+    }
+  
+    .profile-grid {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+  
+    #profile-avatar {
+      width: 160px;
+      height: 160px;
+    }
+  
+    .actions {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  }
+  
+  /* Смартфоны */
+  @media (max-width: 600px) {
+    .auth-card {
+      width: 95vw;
+      padding: 20px 16px;
+      border-radius: 12px;
+    }
+  
+    .auth-title {
+      font-size: 1.3rem;
+      text-align: center;
+    }
+  
+    .auth-sub {
+      font-size: 0.95rem;
+      text-align: center;
+    }
+  
+    .field label {
+      font-size: 0.9rem;
+    }
+  
+    .field input {
+      font-size: 0.95rem;
+      padding: 8px 10px;
+    }
+  
+    .profile-grid {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+  
+    #profile-avatar {
+      width: 130px;
+      height: 130px;
+      border-radius: 10px;
+    }
+  
+    .actions {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  
+    .btn {
+      width: 100%;
+      text-align: center;
+      padding: 12px 0;
+    }
+  }
+  

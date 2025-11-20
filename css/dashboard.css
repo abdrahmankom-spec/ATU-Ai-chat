@@ -1,0 +1,218 @@
+
+html, body {
+    height: 100%;
+    overflow: hidden;
+    margin: 0;
+    font-family: 'Inter', system-ui, sans-serif;
+    background: linear-gradient(180deg, #f8faff 0%, #eef2ff 100%);
+  }
+
+  #app {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* === Кнопка меню === */
+  .menu-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 2000;
+    background: white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 14px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    cursor: pointer;
+    font-size: 20px;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+  .menu-toggle:hover {
+    background: hsl(0, 0%, 96%);
+    transform: translateY(-1px);
+  }
+
+  /* === Выезжающее меню === */
+  nav.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 240px;
+    height: 100%;
+    background: linear-gradient(180deg, #f3f6ff 0%, #e7ebff 100%);
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    gap: 10px;
+    box-shadow: 4px 0 12px rgba(0, 0, 0, 0.08);
+    border-right: 1px solid rgba(255, 255, 255, 0.3);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 1500;
+  }
+
+  nav.sidebar.open {
+    transform: translateX(0);
+  }
+
+  nav.sidebar h2 {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+    color: hsl(210, 60%, 30%);
+    text-align: center;
+  }
+
+  nav.sidebar button {
+    background: white;
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s ease;
+  }
+
+  nav.sidebar button:hover {
+    background: hsl(210, 100%, 95%);
+    transform: translateX(3px);
+  }
+
+  nav.sidebar button.active {
+    background: hsl(210, 85%, 50%);
+    color: white;
+    transform: translateX(3px);
+  }
+
+  /* === Контент === */
+  .page {
+    flex: 1;
+    padding: 60px 40px;
+    display: none;
+    overflow: auto;
+    transition: opacity 0.3s ease;
+  }
+  .page.active {
+    display: block;
+    opacity: 1;
+  }
+
+  /* === Карточки === */
+  .card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .card h3 {
+    margin-top: 0;
+    color: hsl(210, 60%, 30%);
+  }
+
+  .card p {
+    color: #333;
+    line-height: 1.5;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 10px 18px;
+    background: hsl(0, 85%, 50%);
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+    margin-top: 10px;
+    transition: all 0.25s ease;
+  }
+  .btn:hover {
+    background: hsl(210, 90%, 45%);
+    transform: translateY(-1px);
+  }
+  /* ===== Список дисциплин ===== */
+.subjects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+  }
+  
+  .subject-card {
+    background: #fff;
+    border: 1px solid #d0d0d0;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  
+  .subject-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+  
+  .subject-card h4 {
+    margin: 0 0 8px;
+    font-size: 17px;
+    color: #1a4c9d;
+  }
+  
+  .subject-card p {
+    color: #555;
+    font-size: 14px;
+    margin: 0;
+  }
+  /* ===== Блочное расписание ===== */
+.day-block {
+    background: #f9f9ff;
+    border: 1px solid #d9ddf0;
+    border-radius: 12px;
+    padding: 15px 18px;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  }
+  
+  .day-block h4 {
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: #2c3e50;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 4px;
+  }
+  
+  .pair-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+  }
+  
+  .pair-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+  }
+  
+  .pair-time {
+    color: #555;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  
+  .pair-subject {
+    font-weight: 600;
+    color: #1a4c9d;
+    font-size: 16px;
+  }
+  

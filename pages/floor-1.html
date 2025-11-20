@@ -1,0 +1,891 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Кабинет — floor-1</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --wall-left:#ffe5f0;
+  --wall-right:#f0e8ff;
+  --floor:#d4c4b0;
+  --ceiling:#f5f0e8;
+  --desk-top:#8b6f47;
+  --desk-bottom:#6b5435;
+  --cabinet:#c9a882;
+  --bind:#5fb89a;
+  --frame:#5a3e2a;
+  --ui-bg:#ffffff;
+  --shadow: rgba(0,0,0,0.2);
+  --monitor-border:#d0d0d0;
+  --window-blue:#87ceeb;
+  --door-beige:#e8dcc8;
+}
+*{box-sizing:border-box;font-family:Inter,system-ui,Arial,sans-serif}
+html,body{height:100%;margin:0;background:#e8e0d0;overflow:hidden;color:#111}
+
+/* floor and ceiling - realistic room */
+.header{
+  position:fixed;
+  left:0;
+  right:0;
+  top:0;
+  height:8vh;
+  background:var(--ceiling);
+  z-index:200;
+  border-bottom:2px solid rgba(0,0,0,0.1);
+  box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+.footer{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  height:12vh;
+  background:var(--floor);
+  z-index:200;
+  border-top:2px solid rgba(0,0,0,0.1);
+  box-shadow:0 -2px 8px rgba(0,0,0,0.1);
+}
+
+/* main scene */
+.container{
+  position:fixed;
+  left:0;
+  right:0;
+  top:8vh;
+  bottom:12vh;
+  padding:3vh 4vw;
+  display:flex;
+  gap:4vw;
+  align-items:stretch;
+  justify-content:space-between;
+}
+
+/* left room - bedroom/rest area */
+.left-room{
+  width:45%;
+  background:var(--wall-left);
+  border-radius:16px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.15);
+  position:relative;
+  padding:40px;
+  overflow:hidden;
+  border:1px solid rgba(0,0,0,0.08);
+}
+
+
+/* window on the wall */
+.window{
+  position:absolute;
+  right:8%;
+  top:15%;
+  width:50%;
+  aspect-ratio:1.3/1;
+  min-width:180px;
+  background:linear-gradient(135deg,var(--window-blue) 0%,#6bb6ff 100%);
+  border-radius:8px;
+  padding:8%;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  box-shadow: 
+    inset 0 -15px 25px rgba(0,0,0,0.2),
+    inset 0 5px 15px rgba(255,255,255,0.15),
+    0 4px 16px rgba(0,0,0,0.2);
+  border:4px solid rgba(255,255,255,0.3);
+  z-index:5;
+}
+.window::before{
+  content:'';
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:35%;
+  background:linear-gradient(180deg,rgba(173,216,230,0.5) 0%,transparent 100%);
+  border-radius:8px 8px 0 0;
+}
+.window>div{
+  background:rgba(255,255,255,0.12);
+  border-radius:6px;
+  border:1px solid rgba(255,255,255,0.15);
+  box-shadow:inset 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* picture frame on left wall */
+.frame{
+  position:absolute;
+  left:6%;
+  top:12%;
+  width:28%;
+  min-width:150px;
+  aspect-ratio:1.4/1;
+  background:var(--ui-bg);
+  border:10px solid var(--frame);
+  border-radius:6px;
+  box-shadow:
+    0 12px 28px rgba(0,0,0,0.2),
+    inset 0 0 0 1px rgba(90,62,42,0.2);
+  cursor:pointer;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:transform 0.2s ease, box-shadow 0.2s ease;
+  z-index:10;
+}
+.frame:hover{
+  transform:scale(1.05);
+  box-shadow:0 20px 45px rgba(0,0,0,0.3), inset 0 0 0 2px rgba(107,58,24,0.3);
+}
+.frame::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;bottom:0;
+  background:linear-gradient(135deg,transparent 0%,rgba(0,0,0,0.05) 100%);
+  pointer-events:none;
+}
+.frame img{width:100%;height:100%;object-fit:cover;display:block}
+
+/* door on the wall */
+.door{
+  position:absolute;
+  left:20%;
+  bottom:8%;
+  width:16%;
+  min-width:90px;
+  height:32%;
+  background:var(--door-beige);
+  border-radius:8px;
+  box-shadow:
+    0 8px 24px rgba(0,0,0,0.15),
+    inset 0 0 0 2px rgba(0,0,0,0.08),
+    inset 0 -3px 6px rgba(0,0,0,0.1);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+  font-size:13px;
+  color:#555;
+  cursor:pointer;
+  transition:all 0.2s ease;
+  border:2px solid rgba(0,0,0,0.08);
+  z-index:10;
+}
+.door:hover{
+  transform:translateX(3px);
+  box-shadow:0 10px 30px rgba(0,0,0,0.2), inset 0 0 0 2px rgba(0,0,0,0.1);
+}
+.door::before{
+  content:'🚪';
+  position:absolute;
+  left:10px;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:18px;
+}
+.door::after{
+  content:'';
+  position:absolute;
+  right:6px;
+  top:50%;
+  transform:translateY(-50%);
+  width:3px;
+  height:55%;
+  background:rgba(0,0,0,0.15);
+  border-radius:2px;
+}
+
+/* right room - work area */
+.right-room{
+  width:52%;
+  background:var(--wall-right);
+  border-radius:16px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.15);
+  position:relative;
+  padding:40px;
+  overflow:visible;
+  display:flex;
+  align-items:flex-end;
+  gap:3%;
+  border:1px solid rgba(0,0,0,0.08);
+}
+
+
+/* desk block */
+.desk{
+  width:58%;
+  min-height:240px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+}
+.table{
+  background:linear-gradient(180deg,var(--desk-top) 0%,var(--desk-bottom) 100%);
+  border-radius:8px;
+  padding:20px 24px;
+  color:#fff;
+  box-shadow:
+    0 8px 24px rgba(0,0,0,0.2),
+    inset 0 1px 3px rgba(255,255,255,0.1),
+    inset 0 -2px 6px rgba(0,0,0,0.3);
+  min-height:160px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  border:1px solid rgba(0,0,0,0.15);
+  position:relative;
+}
+.table::before{
+  content:'';
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:25%;
+  background:linear-gradient(180deg,rgba(255,255,255,0.08) 0%,transparent 100%);
+  border-radius:8px 8px 0 0;
+}
+.table .title{
+  font-weight:700;
+  font-size:18px;
+  text-shadow:0 1px 3px rgba(0,0,0,0.4);
+  letter-spacing:0.3px;
+}
+.table .slim{
+  height:8px;
+  background:rgba(0,0,0,0.2);
+  border-radius:4px;
+  margin-top:12px;
+  box-shadow:inset 0 1px 3px rgba(0,0,0,0.3);
+}
+
+/* monitor area */
+.monitor-area{
+  width:28%;
+  min-width:170px;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:12px;
+  z-index:10;
+}
+.monitor{
+  width:100%;
+  height:120px;
+  background:linear-gradient(135deg,#0f0f0f 0%,#1a1a1a 50%,#0f0f0f 100%);
+  border-radius:6px;
+  border:8px solid var(--monitor-border);
+  box-shadow:
+    0 6px 20px rgba(0,0,0,0.25),
+    inset 0 0 0 1px rgba(255,255,255,0.08),
+    inset 0 1px 6px rgba(0,0,0,0.5);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#fff;
+  cursor:pointer;
+  transition:all 0.2s ease;
+  position:relative;
+  overflow:hidden;
+}
+.monitor::before{
+  content:'';
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  background:radial-gradient(circle at 30% 30%,rgba(100,150,255,0.08) 0%,transparent 70%);
+  pointer-events:none;
+}
+.monitor:hover{
+  transform:translateY(-1px);
+  box-shadow:0 8px 24px rgba(0,0,0,0.3), inset 0 0 0 1px rgba(255,255,255,0.1);
+}
+.monitor button{
+  background:linear-gradient(135deg,#2a2a2a 0%,#1a1a1a 100%);
+  border:1px solid rgba(255,255,255,0.08);
+  color:#fff;
+  padding:8px 14px;
+  border-radius:6px;
+  cursor:pointer;
+  font-weight:600;
+  font-size:13px;
+  transition:all 0.2s ease;
+  box-shadow:0 2px 6px rgba(0,0,0,0.3);
+  z-index:1;
+}
+.monitor button:hover{
+  background:linear-gradient(135deg,#3a3a3a 0%,#2a2a2a 100%);
+  transform:scale(1.03);
+}
+
+/* shelf under monitor */
+.shelf-line{
+  position:absolute;
+  left:40%;
+  bottom:30%;
+  width:34%;
+  height:10px;
+  background:linear-gradient(180deg,#e8e0d0 0%,#d4c4b0 100%);
+  border-radius:4px;
+  box-shadow:
+    0 4px 12px rgba(0,0,0,0.1),
+    inset 0 1px 2px rgba(255,255,255,0.4);
+  border:1px solid rgba(0,0,0,0.08);
+}
+
+/* cabinet right */
+.cabinet{
+  width:20%;
+  min-width:180px;
+  background:linear-gradient(180deg,var(--cabinet) 0%,#b8966a 100%);
+  border-radius:8px;
+  padding:18px;
+  box-shadow:
+    0 6px 20px rgba(0,0,0,0.15),
+    inset 0 0 0 1px rgba(0,0,0,0.1),
+    inset 0 1px 3px rgba(255,255,255,0.2);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:14px;
+  border:1px solid rgba(0,0,0,0.12);
+  position:relative;
+  z-index:10;
+}
+.cabinet::before{
+  content:'';
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:18%;
+  background:linear-gradient(180deg,rgba(255,255,255,0.12) 0%,transparent 100%);
+  border-radius:8px 8px 0 0;
+}
+.cabinet .binds{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  width:100%;
+}
+.cabinet .bind{
+  width:28%;
+  height:56px;
+  background:linear-gradient(135deg,var(--bind) 0%,#4fa888 100%);
+  border-radius:6px;
+  box-shadow:
+    0 2px 6px rgba(0,0,0,0.12),
+    inset 0 1px 2px rgba(255,255,255,0.25);
+  border:1px solid rgba(0,0,0,0.08);
+}
+.cabinet .name{
+  width:90%;
+  background:var(--ui-bg);
+  padding:12px;
+  border-radius:8px;
+  text-align:center;
+  font-weight:700;
+  font-size:14px;
+  cursor:pointer;
+  box-shadow:0 4px 12px rgba(0,0,0,0.1);
+  transition:all 0.2s ease;
+  border:1px solid rgba(0,0,0,0.06);
+}
+.cabinet .name:hover{
+  transform:translateY(-1px);
+  box-shadow:0 6px 16px rgba(0,0,0,0.12);
+}
+.cabinet .pass-btn{
+  padding:10px 14px;
+  border-radius:8px;
+  border:1px solid rgba(0,0,0,0.08);
+  background:var(--ui-bg);
+  cursor:pointer;
+  box-shadow:0 4px 12px rgba(0,0,0,0.08);
+  font-weight:600;
+  font-size:13px;
+  transition:all 0.2s ease;
+  width:90%;
+}
+.cabinet .pass-btn:hover{
+  transform:translateY(-1px);
+  box-shadow:0 6px 16px rgba(0,0,0,0.1);
+  background:#f8f8f8;
+}
+
+/* physics DOM previews - absolute */
+.phys{
+  position:absolute;
+  z-index:120;
+  pointer-events:none;
+  transition:right 70ms linear,bottom 70ms linear,transform 70ms linear;
+  will-change:right,bottom,transform;
+  filter:drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+}
+#trashPreview{right:8%;bottom:12%;width:72px;height:96px}
+#phonePreview{right:28%;bottom:14%;width:48px;height:78px}
+#mugPreview{right:24%;bottom:14%;width:44px;height:44px}
+#bookPreview{right:34%;bottom:14%;width:64px;height:46px}
+#penPreview{right:18%;bottom:14%;width:32px;height:80px}
+#notebookPreview{right:38%;bottom:14%;width:56px;height:72px}
+
+/* canvas covers scene for physics (transparent) */
+#physics-canvas{position:absolute;left:0;right:0;top:8vh;bottom:12vh;z-index:110;pointer-events:auto}
+
+/* modal */
+.modal-backdrop{
+  position:fixed;
+  left:0;
+  right:0;
+  top:0;
+  bottom:0;
+  background:rgba(0,0,0,0.5);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:1000;
+  backdrop-filter:blur(4px);
+}
+.modal{
+  width:380px;
+  max-width:92%;
+  background:var(--ui-bg);
+  padding:24px;
+  border-radius:16px;
+  box-shadow:0 30px 80px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.1);
+}
+.modal h3{
+  margin:0 0 16px 0;
+  font-size:20px;
+  font-weight:700;
+  color:#333;
+}
+.modal label{
+  font-size:14px;
+  color:#555;
+  font-weight:600;
+  display:block;
+  margin-bottom:8px;
+}
+.modal input[type="text"], 
+.modal input[type="password"], 
+.modal input[type="file"]{
+  width:100%;
+  padding:12px 14px;
+  border-radius:10px;
+  border:2px solid #e6e6e9;
+  margin-top:6px;
+  font-size:14px;
+  transition:all 0.2s ease;
+  box-sizing:border-box;
+}
+.modal input[type="text"]:focus, 
+.modal input[type="password"]:focus{
+  outline:none;
+  border-color:#06b6ff;
+  box-shadow:0 0 0 3px rgba(6,182,255,0.1);
+}
+.modal .btn{
+  padding:10px 20px;
+  border-radius:10px;
+  border:none;
+  font-weight:600;
+  cursor:pointer;
+  transition:all 0.2s ease;
+  font-size:14px;
+}
+.modal .btn:first-of-type{
+  background:#f0f0f0;
+  color:#333;
+}
+.modal .btn:first-of-type:hover{
+  background:#e0e0e0;
+}
+.modal .btn:last-of-type{
+  background:linear-gradient(135deg,#06b6ff,#0ea7ff);
+  color:#fff;
+}
+.modal .btn:last-of-type:hover{
+  background:linear-gradient(135deg,#0ea7ff,#06b6ff);
+  transform:translateY(-1px);
+  box-shadow:0 4px 12px rgba(6,182,255,0.3);
+}
+
+/* hidden compatibility inputs */
+.hidden-input{position:fixed;left:-9999px}
+@media (max-width:1000px){
+  .container{flex-direction:column;padding:2vh 2vw;gap:2vh}
+  .left-room,.right-room{width:100%}
+  #physics-canvas{top:8vh;bottom:12vh}
+}
+</style>
+</head>
+<body>
+
+<!-- header / footer -->
+<div class="header" aria-hidden="true"></div>
+<div class="footer" aria-hidden="true"></div>
+
+<div class="container">
+  <!-- LEFT room (pink) -->
+  <div class="left-room">
+    <div class="window">
+      <div></div><div></div><div></div><div></div>
+    </div>
+
+    <!-- picture frame (click to change photo) -->
+    <div class="frame" id="pictureFrame" title="Клик — сменить фото">
+      <img id="profile-avatar" src="" alt="Фото пользователя">
+    </div>
+
+    <div class="door" title="Выйти в портал">Дверь</div>
+  </div>
+
+  <!-- RIGHT room (desk/cabinet) -->
+  <div class="right-room">
+    <div class="desk">
+      <div class="table">
+        <div class="title">Рабочий стол</div>
+        <div style="flex:1"></div>
+        <div class="slim"></div>
+      </div>
+    </div>
+
+    <div class="monitor-area">
+      <div class="monitor" id="monitor" title="Клик — перейти в дашборд"><button id="to-portal">Перейти</button></div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <div id="phoneDisplay" style="width:48px;height:78px;border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 18px rgba(0,0,0,0.12);font-weight:700">тел</div>
+        <div id="mugDisplay" style="width:44px;height:44px;border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 18px rgba(0,0,0,0.12);font-weight:700">чаш</div>
+      </div>
+    </div>
+
+    <div class="cabinet" id="cabinet">
+      <div class="binds"><div class="bind"></div><div class="bind"></div><div class="bind"></div></div>
+      <div class="name" id="shelfName">Имя владельца</div>
+      <button class="pass-btn" id="shelfPassBtn">Сменить пароль</button>
+    </div>
+
+    <!-- thin shelf line -->
+    <div class="shelf-line" aria-hidden="true"></div>
+
+    <!-- physics previews -->
+    <div id="trashPreview" class="phys"><div style="width:100%;height:100%;background:linear-gradient(135deg,#f5f5f5 0%,#e8e8e8 100%);border:4px solid #d0d0d0;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;box-shadow:inset 0 2px 4px rgba(0,0,0,0.1)">мусор</div></div>
+    <div id="phonePreview" class="phys"><div style="width:100%;height:100%;background:linear-gradient(135deg,#2a2a2a 0%,#1a1a1a 100%);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;border:2px solid #333;color:#fff;box-shadow:inset 0 1px 2px rgba(255,255,255,0.1)">тел</div></div>
+    <div id="mugPreview" class="phys"><div style="width:100%;height:100%;background:linear-gradient(135deg,#fff 0%,#f0f0f0 100%);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;border:3px solid #ddd;box-shadow:inset 0 2px 4px rgba(0,0,0,0.1)">чаш</div></div>
+    <div id="bookPreview" class="phys"><div style="width:100%;height:100%;background:linear-gradient(135deg,#8b4513 0%,#654321 100%);border-radius:4px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;border:2px solid #5a2d0a;color:#fff;box-shadow:inset 0 1px 2px rgba(255,255,255,0.1)">книг</div></div>
+    <div id="penPreview" class="phys"><div style="width:100%;height:100%;background:linear-gradient(180deg,#2563eb 0%,#1e40af 100%);border-radius:4px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:10px;border:1px solid #1e3a8a;color:#fff;box-shadow:inset 0 1px 2px rgba(255,255,255,0.2)">руч</div></div>
+    <div id="notebookPreview" class="phys"><div style="width:100%;height:100%;background:linear-gradient(135deg,#fff 0%,#f8f8f8 100%);border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;border:3px solid #ddd;box-shadow:inset 0 2px 4px rgba(0,0,0,0.1)">блок</div></div>
+  </div>
+</div>
+
+<!-- canvas for physics -->
+<canvas id="physics-canvas"></canvas>
+
+<!-- modal root -->
+<div id="modalRoot" style="display:none"></div>
+
+<!-- Hidden IDs for compatibility with your scripts -->
+<input id="user-name" class="hidden-input" type="text" />
+<input id="profile-pass" class="hidden-input" type="password" />
+<input id="group-name" class="hidden-input" type="text" />
+<input id="profile-photo" class="hidden-input" type="file" accept="image/*" />
+
+<!-- Matter.js -->
+<script src="https://cdn.jsdelivr.net/npm/matter-js"></script>
+<script>
+/* ===== Matter.js setup ===== */
+const Engine = Matter.Engine,
+      Render = Matter.Render,
+      Runner = Matter.Runner,
+      Bodies = Matter.Bodies,
+      Composite = Matter.Composite,
+      Mouse = Matter.Mouse,
+      MouseConstraint = Matter.MouseConstraint,
+      Body = Matter.Body,
+      Events = Matter.Events;
+
+const engine = Engine.create();
+engine.world.gravity.y = 1.0;
+
+const canvas = document.getElementById('physics-canvas');
+const render = Render.create({
+  canvas: canvas,
+  engine: engine,
+  options: {
+    width: window.innerWidth,
+    height: window.innerHeight - (8 * window.innerHeight / 100) - (12 * window.innerHeight / 100),
+    background: 'transparent',
+    wireframes: false,
+    pixelRatio: window.devicePixelRatio || 1
+  }
+});
+
+/* helpers */
+const vw = v => window.innerWidth * v / 100;
+const vh = v => window.innerHeight * v / 100;
+
+/* Calculate desk position - right room starts at ~49% of screen width */
+const deskStartX = window.innerWidth * 0.49 + window.innerWidth * 0.04; // left room end + gap
+const deskWidth = window.innerWidth * 0.52 * 0.58; // right room width * desk width
+const deskCenterX = deskStartX + deskWidth / 2;
+const deskTopY = window.innerHeight * 0.08 + (window.innerHeight * 0.80 * 0.75); // header + 75% of work area
+
+/* Bodies: items on the desk */
+const phone = Bodies.rectangle(deskCenterX - 120, deskTopY - 20, 48, 78, {
+  render: { fillStyle: '#2a2a2a', strokeStyle: '#333', lineWidth: 2 },
+  friction: 0.6, restitution: 0.06, density: 0.002
+});
+
+const mug = Bodies.circle(deskCenterX - 60, deskTopY - 15, 22, {
+  render: { fillStyle: '#ffffff', strokeStyle: '#ddd', lineWidth: 3 },
+  friction: 0.6, restitution: 0.08, density: 0.002
+});
+
+const book = Bodies.rectangle(deskCenterX, deskTopY - 20, 64, 44, {
+  render: { fillStyle: '#8b4513', strokeStyle: '#5a2d0a', lineWidth: 2 },
+  friction: 0.7, restitution: 0.03, density: 0.002
+});
+
+const pen = Bodies.rectangle(deskCenterX + 60, deskTopY - 10, 32, 80, {
+  render: { fillStyle: '#2563eb', strokeStyle: '#1e3a8a', lineWidth: 1 },
+  friction: 0.5, restitution: 0.1, density: 0.0015
+});
+
+const notebook = Bodies.rectangle(deskCenterX + 100, deskTopY - 20, 56, 72, {
+  render: { fillStyle: '#ffffff', strokeStyle: '#ddd', lineWidth: 3 },
+  friction: 0.7, restitution: 0.04, density: 0.002
+});
+
+const trash = Bodies.rectangle(deskCenterX + 150, deskTopY - 25, 72, 96, {
+  render: { fillStyle: '#f5f5f5', strokeStyle: '#d0d0d0', lineWidth: 4 },
+  friction: 0.9, restitution: 0.02, density: 0.003
+});
+
+/* invisible desk platform */
+const deskPlatform = Bodies.rectangle(deskCenterX, deskTopY, deskWidth, 20, { 
+  isStatic: true, 
+  render: { visible: false },
+  label: 'desk'
+});
+
+/* invisible bounds */
+const ground = Bodies.rectangle(window.innerWidth/2, window.innerHeight + 160, window.innerWidth*2, 240, { isStatic:true, render:{visible:false} });
+const leftWall = Bodies.rectangle(-160, window.innerHeight/2, 320, window.innerHeight*2, { isStatic:true, render:{visible:false} });
+const rightWall = Bodies.rectangle(window.innerWidth + 160, window.innerHeight/2, 320, window.innerHeight*2, { isStatic:true, render:{visible:false} });
+const ceiling = Bodies.rectangle(window.innerWidth/2, -160, window.innerWidth*2, 320, { isStatic:true, render:{visible:false} });
+
+Composite.add(engine.world, [trash, phone, mug, book, pen, notebook, deskPlatform, ground, leftWall, rightWall, ceiling]);
+
+/* mouse */
+const mouse = Mouse.create(render.canvas);
+mouse.pixelRatio = window.devicePixelRatio || 1;
+const mouseConstraint = MouseConstraint.create(engine, {
+  mouse: mouse,
+  constraint: { stiffness: 0.2, damping: 0.15, render: { visible:false } }
+});
+Composite.add(engine.world, mouseConstraint);
+
+/* run */
+Render.run(render);
+Runner.run(Runner.create(), engine);
+
+/* Sync DOM previews with physics bodies */
+const trashPreview = document.getElementById('trashPreview');
+const phonePreview = document.getElementById('phonePreview');
+const mugPreview = document.getElementById('mugPreview');
+const bookPreview = document.getElementById('bookPreview');
+const penPreview = document.getElementById('penPreview');
+const notebookPreview = document.getElementById('notebookPreview');
+
+function syncPreview(body, el){
+  if(!el) return;
+  const topOffset = (8 * window.innerHeight / 100); // header height
+  const x = body.position.x;
+  const y = body.position.y + topOffset;
+  const right = Math.max(4, Math.round(window.innerWidth - x));
+  const bottom = Math.max(4, Math.round(window.innerHeight - y));
+  el.style.right = (right - el.offsetWidth/2) + 'px';
+  el.style.bottom = (bottom - el.offsetHeight/2) + 'px';
+  el.style.transform = 'rotate(' + (body.angle * 180/Math.PI) + 'deg)';
+}
+
+Events.on(engine, 'afterUpdate', () => {
+  syncPreview(trash, trashPreview);
+  syncPreview(phone, phonePreview);
+  syncPreview(mug, mugPreview);
+  syncPreview(book, bookPreview);
+  syncPreview(pen, penPreview);
+  syncPreview(notebook, notebookPreview);
+});
+
+/* stability helpers */
+Events.on(engine, 'beforeUpdate', () => {
+  [trash, phone, mug, book, pen, notebook].forEach(b => {
+    if(Math.abs(b.velocity.x) > 30) Body.setVelocity(b, { x: Math.sign(b.velocity.x) * 12, y: b.velocity.y });
+    if(Math.abs(b.velocity.y) > 60) Body.setVelocity(b, { x: b.velocity.x, y: Math.sign(b.velocity.y) * 32 });
+  });
+});
+
+/* clamp out-of-bounds - return items to desk */
+setInterval(()=> {
+  const deskStartX = window.innerWidth * 0.49 + window.innerWidth * 0.04;
+  const deskWidth = window.innerWidth * 0.52 * 0.58;
+  const deskCenterX = deskStartX + deskWidth / 2;
+  const deskTopY = window.innerHeight * 0.08 + (window.innerHeight * 0.80 * 0.75);
+  
+  [trash, phone, mug, book, pen, notebook].forEach((b, idx) => {
+    if(b.position.y > window.innerHeight + 800 || b.position.x < -1600 || b.position.x > window.innerWidth + 1600){
+      const offsetX = (idx - 2.5) * 60; // spread items across desk
+      Body.setPosition(b, { x: deskCenterX + offsetX, y: deskTopY - 20 });
+      Body.setVelocity(b, { x:0, y:0 });
+      Body.setAngle(b, 0);
+    }
+  });
+}, 2000);
+
+/* resize */
+window.addEventListener('resize', () => {
+  Render.stop(render);
+  const newHeight = window.innerHeight - (8 * window.innerHeight / 100) - (12 * window.innerHeight / 100);
+  render.canvas.width = window.innerWidth;
+  render.canvas.height = newHeight;
+  render.options.width = window.innerWidth;
+  render.options.height = newHeight;
+  Render.run(render);
+  
+  // Update desk platform
+  const deskStartX = window.innerWidth * 0.49 + window.innerWidth * 0.04;
+  const deskWidth = window.innerWidth * 0.52 * 0.58;
+  const deskCenterX = deskStartX + deskWidth / 2;
+  const deskTopY = window.innerHeight * 0.08 + (window.innerHeight * 0.80 * 0.75);
+  Body.setPosition(deskPlatform, { x: deskCenterX, y: deskTopY });
+  Body.scale(deskPlatform, deskWidth / (deskPlatform.bounds.max.x - deskPlatform.bounds.min.x), 1);
+  
+  Body.setPosition(ground, { x: window.innerWidth/2, y: window.innerHeight + 160 });
+  Body.setPosition(rightWall, { x: window.innerWidth + 160, y: window.innerHeight/2 });
+});
+
+/* ---------- Interactions: picture/name/password/monitor ---------- */
+/* hidden inputs for compatibility */
+const hiddenUser = document.getElementById('user-name');
+const hiddenPass = document.getElementById('profile-pass');
+const hiddenGroup = document.getElementById('group-name');
+const hiddenPhoto = document.getElementById('profile-photo');
+
+const pictureFrame = document.getElementById('pictureFrame');
+const shelfName = document.getElementById('shelfName');
+const shelfPassBtn = document.getElementById('shelfPassBtn');
+const monitorBtn = document.getElementById('to-portal');
+const monitor = document.getElementById('monitor');
+const door = document.querySelector('.door');
+const profileAvatar = document.getElementById('profile-avatar');
+
+/* modal helper */
+function openModal(opts){
+  const root = document.getElementById('modalRoot');
+  root.innerHTML = '';
+  const backdrop = document.createElement('div'); backdrop.className = 'modal-backdrop';
+  const modal = document.createElement('div'); modal.className = 'modal';
+  if(opts.title){ const h=document.createElement('h3'); h.textContent=opts.title; modal.appendChild(h); }
+  const fields = {};
+  (opts.fields||[]).forEach(f => {
+    const lab = document.createElement('label'); lab.textContent = f.label; modal.appendChild(lab);
+    let inp;
+    if(f.type === 'file'){ inp = document.createElement('input'); inp.type = 'file'; inp.accept = 'image/*'; }
+    else { inp = document.createElement('input'); inp.type = f.type || 'text'; inp.placeholder = f.placeholder || ''; }
+    inp.style.marginTop = '6px'; inp.id = f.id || '';
+    modal.appendChild(inp);
+    fields[f.id] = inp;
+  });
+  const row = document.createElement('div'); row.style.display='flex'; row.style.justifyContent='flex-end'; row.style.gap='8px'; row.style.marginTop='12px';
+  const btnClose = document.createElement('button'); btnClose.textContent='Отмена'; btnClose.className='btn';
+  btnClose.onclick = ()=>{ root.style.display='none'; root.innerHTML=''; };
+  const btnSave = document.createElement('button'); btnSave.textContent='Сохранить'; btnSave.className='btn';
+  btnSave.onclick = ()=>{ if(typeof opts.onSave === 'function') opts.onSave(fields); root.style.display='none'; root.innerHTML=''; };
+  row.appendChild(btnClose); row.appendChild(btnSave); modal.appendChild(row);
+  backdrop.appendChild(modal); root.appendChild(backdrop); root.style.display='block';
+}
+
+/* picture click -> upload */
+pictureFrame.addEventListener('click', ()=> {
+  openModal({
+    title:'Сменить фото',
+    fields:[{id:'modal-photo',type:'file',label:'Выберите фото'}],
+    onSave(fields){
+      const file = fields['modal-photo'].files && fields['modal-photo'].files[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = ()=> {
+        profileAvatar.src = reader.result;
+        if(hiddenPhoto) hiddenPhoto.dataset.preview = reader.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+});
+
+/* name change */
+shelfName.addEventListener('click', ()=> {
+  openModal({
+    title:'Сменить имя',
+    fields:[{id:'modal-name',type:'text',label:'Имя',placeholder:'Новое имя'}],
+    onSave(fields){
+      const val = fields['modal-name'].value.trim();
+      if(!val) return;
+      shelfName.textContent = val;
+      if(hiddenUser) hiddenUser.value = val;
+    }
+  });
+});
+
+/* password change */
+shelfPassBtn.addEventListener('click', ()=> {
+  openModal({
+    title:'Сменить пароль',
+    fields:[{id:'modal-pass',type:'password',label:'Новый пароль',placeholder:'Новый пароль'}],
+    onSave(fields){
+      const v = fields['modal-pass'].value;
+      if(!v) return;
+      if(hiddenPass) hiddenPass.value = v;
+      alert('Пароль обновлён локально. Синхронизируй с БД через свой скрипт.');
+    }
+  });
+});
+
+/* monitor -> dashboard (click anywhere on monitor) */
+monitor.addEventListener('click', (e)=> {
+  e.stopPropagation();
+  window.location.href = 'floor-6.html';
+});
+
+/* door -> index.html */
+if(door){
+  door.addEventListener('click', ()=> {
+    window.location.href = '../index.html';
+  });
+}
+
+/* sync external preview (if your script sets data-preview on profile-photo) */
+if(hiddenPhoto){
+  const obs = new MutationObserver(()=> { if(hiddenPhoto.dataset.preview) profileAvatar.src = hiddenPhoto.dataset.preview; });
+  obs.observe(hiddenPhoto, { attributes:true, attributeFilter:['data-preview'] });
+}
+
+/* initial placeholder */
+window.addEventListener('load', ()=> {
+  if(!profileAvatar.src) profileAvatar.src = 'https://via.placeholder.com/420x280?text=Фото+пользователя';
+  // initial sync
+  syncPreview(trash, trashPreview);
+  syncPreview(phone, phonePreview);
+  syncPreview(mug, mugPreview);
+  syncPreview(book, bookPreview);
+  syncPreview(pen, penPreview);
+  syncPreview(notebook, notebookPreview);
+});
+</script>
+</body>
+</html>

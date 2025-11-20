@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Библиотека — ATU</title>
+  <link rel="stylesheet" href="../page.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+  <style>
+:root {
+--brown: #7a5c43;
+--brown-dark: #3e2f23;
+--brown-light: #f6efe8;
+--bg: #f8f5f2;
+--text: #2c2a27;
+--muted: #5f5246;
+}
+
+body {
+background: linear-gradient(180deg, var(--bg), #eee5dc);
+font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+color: var(--text);
+line-height: 1.65;
+margin: 0;
+display: flex;
+justify-content: center;
+}
+
+.auth-card {
+width: 100%;
+max-width: 1200px;
+background: transparent;
+animation: fadeIn 0.5s ease both;
+}
+
+/* === Шапка профиля === */
+header {
+text-align: center;
+padding: 60px 20px 40px;
+background: var(--brown-light);
+border-bottom: 2px solid var(--brown);
+}
+
+header h1 {
+margin: 0;
+font-size: 2.2rem;
+color: var(--brown-dark);
+font-family: "Georgia", serif;
+letter-spacing: 0.5px;
+animation: slideDown 0.6s ease both;
+}
+/* Да */
+header p {
+color: var(--muted);
+font-size: 1.05rem;
+margin-top: 8px;
+animation: fadeIn 1s ease both;
+}
+
+/* === Разметка === */
+.layout {
+display: grid;
+grid-template-columns: 260px 1fr;
+gap: 40px;
+margin: 60px auto;
+padding: 0 20px;
+}
+
+/* === Навигация === */
+.library-nav {
+background: #fff;
+border-right: 2px solid rgba(0,0,0,0.05);
+padding: 0;
+position: sticky;
+top: 30px;
+align-self: start;
+}
+
+.library-nav a {
+display: block;
+padding: 14px 18px;
+text-decoration: none;
+color: var(--brown-dark);
+font-weight: 500;
+border-bottom: 1px solid rgba(0,0,0,0.05);
+transition: 0.25s ease;
+}
+
+.library-nav a:hover {
+background: var(--brown-light);
+color: var(--brown);
+transform: translateX(4px);
+}
+
+/* === Контент === */
+main {
+background: #fff;
+border-left: 2px solid rgba(0,0,0,0.05);
+padding: 48px 56px;
+box-sizing: border-box;
+animation: fadeIn 0.6s ease both;
+}
+
+.library-section {
+margin-bottom: 64px;
+}
+
+.library-section h2 {
+font-family: "Georgia", serif;
+color: var(--brown-dark);
+border-bottom: 2px solid var(--brown);
+padding-bottom: 6px;
+margin-bottom: 18px;
+font-size: 1.55rem;
+letter-spacing: 0.3px;
+}
+
+.library-section p,
+.library-section li {
+font-size: 1rem;
+color: var(--text);
+margin-bottom: 10px;
+transition: color 0.2s ease;
+}
+
+.library-section ul {
+padding-left: 22px;
+list-style-type: "— ";
+}
+
+.library-section a {
+color: var(--brown);
+text-decoration: underline 0.08em rgba(122,92,67,0.3);
+transition: 0.2s ease;
+}
+
+.library-section a:hover {
+color: var(--brown-dark);
+text-decoration-color: var(--brown-dark);
+}
+
+/* === Кнопка "назад" === */
+.btn-back {
+display: inline-block;
+margin-top: 40px;
+padding: 12px 28px;
+background: var(--brown);
+color: #fff;
+text-decoration: none;
+font-weight: 500;
+letter-spacing: 0.4px;
+transition: background 0.3s ease, transform 0.2s ease;
+border: none;
+}
+
+.btn-back:hover {
+background: var(--brown-dark);
+transform: translateY(-2px);
+}
+
+/* === Кнопка наверх === */
+#toTop {
+position: fixed;
+bottom: 24px;
+right: 24px;
+width: 46px;
+height: 46px;
+background: var(--brown);
+color: #fff;
+border: none;
+font-size: 1.3rem;
+cursor: pointer;
+display: none;
+transition: background 0.3s ease, transform 0.2s ease, opacity 0.2s ease;
+opacity: 0.85;
+}
+
+#toTop:hover {
+background: var(--brown-dark);
+transform: scale(1.08);
+opacity: 1;
+}
+
+/* === Анимациий === */
+@keyframes fadeIn {
+from { opacity: 0; transform: translateY(8px); }
+to { opacity: 1; transform: none; }
+}
+
+@keyframes slideDown {
+from { opacity: 0; transform: translateY(-10px); }
+to { opacity: 1; transform: none; }
+}
+
+/* === Адаптив === */
+@media (max-width: 900px) {
+.layout {
+grid-template-columns: 1fr;
+gap: 24px;
+margin: 30px auto;
+}
+.library-nav {
+border-right: none;
+border-bottom: 2px solid rgba(0,0,0,0.06);
+}
+main {
+border-left: none;
+padding: 32px 20px;
+}
+}
+
+ </style>
+</head>
+<body class="auth-page">
+  <div class="auth-card">
+    <header>
+      <h1>Библиотека АТУ</h1>
+      <p>Научная библиотека, электронные ресурсы и справочные материалы</p>
+    </header>
+
+    <div class="layout">
+      <nav class="library-nav">
+        <a href="#scientific"><i class="fa-solid fa-flask"></i> Научная база</a>
+        <a href="#library"><i class="fa-solid fa-book"></i> Библиотека</a>
+        <a href="#eresources"><i class="fa-solid fa-laptop"></i> Электронные ресурсы</a>
+        <a href="#recommend"><i class="fa-solid fa-graduation-cap"></i> Рекомендации</a>
+        <a href="#links"><i class="fa-solid fa-link"></i> Полезные ссылки</a>
+        <a href="#faq"><i class="fa-regular fa-circle-question"></i> FAQ</a>
+        <a href="#contacts"><i class="fa-solid fa-envelope"></i> Контакты</a>
+      </nav>
+      
+
+      <main>
+        <section id="scientific" class="library-section">
+          <h2>Научная база</h2>
+          <p>В научной библиотеке АТУ представлены базы данных научных публикаций, диссертаций и журналов, доступных для студентов и преподавателей.</p>
+        </section>
+
+        <section id="library" class="library-section">
+          <h2>Библиотека</h2>
+          <p>Главный фонд библиотеки содержит более 300 000 изданий по всем направлениям подготовки университета.</p>
+        </section>
+
+        <section id="eresources" class="library-section">
+          <h2>Электронные ресурсы</h2>
+          <ul>
+            <li><a href="https://elibrary.ru/" target="_blank">eLibrary.ru</a></li>
+            <li><a href="https://cyberleninka.ru/" target="_blank">CyberLeninka</a></li>
+            <li><a href="https://openedu.ru/" target="_blank">OpenEdu</a></li>
+          </ul>
+        </section>
+
+        <section id="recommend" class="library-section">
+          <h2>Рекомендации</h2>
+          <p>Рекомендуемая литература по курсам, материалы для самостоятельного изучения и методические указания.</p>
+        </section>
+
+        <section id="links" class="library-section">
+          <h2>Полезные ссылки</h2>
+          <ul>
+            <li><a href="https://atu.edu.kz/" target="_blank">АТУ — официальный сайт</a></li>
+            <li><a href="https://atu.edu.kz/kk/news/" target="_blank">Новости университета</a></li>
+            <li><a href="https://library.kz/" target="_blank">Национальная библиотека РК</a></li>
+          </ul>
+        </section>
+
+        <section id="faq" class="library-section">
+          <h2>FAQ</h2>
+          <p><strong>Над сайтом работали:</strong><br>Бакытулы Абдрахман<br>Сейткул Берик<br>Абишев Ансар<br>Касымбеков Амир</p>
+          <p><strong>Общее время на вёрстку Сайт-портала ATU</strong><br>1 неделя группы ПИ 24-21</p>
+        </section>
+
+        <section id="contacts" class="library-section">
+          <h2>Контакты</h2>
+          <p><i class="fa-solid fa-location-dot"></i> Алматы, ул. Толе би 100</p>
+          <p><i class="fa-solid fa-phone"></i> +7 (727) 123-45-67</p>
+          <p><i class="fa-solid fa-envelope"></i> library@atu.edu.kz</p>
+        </section>
+        
+
+        <a href="../index.html" class="btn-back">← На главную</a>
+      </main>
+    </div>
+  </div>
+
+  <button id="toTop">↑</button>
+
+  <script>
+    // кнопка наверх
+    const toTop = document.getElementById("toTop");
+    window.addEventListener("scroll", () => {
+      toTop.style.display = window.scrollY > 300 ? "block" : "none";
+    });
+    toTop.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  </script>
+</body>
+</html>

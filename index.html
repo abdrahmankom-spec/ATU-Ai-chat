@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>АТУ — портал</title>
+  
+  <link rel="icon" type="image/png" href="media/logo-atupng.png">
+  
+
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  
+
+
+  <link rel="preload" href="css/style.css" as="style">
+  <link rel="stylesheet" href="css/style.css">
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer></script>
+  
+  <style>
+
+    /*  СТИЛИ ДЛЯ ИИ-ЧАТА */
+    .ai-chat {
+      position: fixed !important;
+      left: 0 !important;
+      top: 0 !important;
+      bottom: 0 !important;
+      width: 360px !important;
+      max-width: 85vw !important;
+      padding: 16px !important;
+      border-radius: 0 20px 20px 0 !important;
+      background: rgba(3, 16, 37, 0.95) !important;
+      box-shadow: 4px 0 40px rgba(0, 0, 0, 0.5) !important;
+      backdrop-filter: blur(14px) !important;
+      color: #f5f5f5 !important;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif !important;
+      z-index: 999 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 10px !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      border-left: none !important;
+      transform: translateX(-100%) !important;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+      overflow-y: auto !important;
+    }
+    .ai-chat--open { transform: translateX(0) !important; }
+    .ai-chat--hidden { display: none !important; }
+    .ai-chat__header { display: flex !important; align-items: center !important; justify-content: space-between !important; gap: 8px !important; }
+    .ai-chat__title { font-weight: 600 !important; font-size: 16px !important; letter-spacing: 0.02em !important; }
+    .ai-chat__badge { font-size: 12px !important; padding: 2px 8px !important; border-radius: 999px !important; background: rgba(34, 197, 94, 0.2) !important; color: #34d399 !important; }
+    .ai-chat__status { font-size: 12px !important; color: rgba(255, 255, 255, 0.6) !important; }
+    .ai-chat__log { 
+      flex: 1 !important; 
+      overflow-y: auto !important; 
+      display: flex !important; 
+      flex-direction: column !important; 
+      gap: 8px !important; 
+      padding-right: 4px !important;
+    }
+    
+    /* Стилизация скроллбара для ИИ-чата */
+    .ai-chat__log::-webkit-scrollbar {
+      width: 6px !important;
+    }
+    
+    .ai-chat__log::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05) !important;
+      border-radius: 10px !important;
+    }
+    
+    .ai-chat__log::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.8), rgba(124, 58, 237, 0.8)) !important;
+      border-radius: 10px !important;
+      transition: background 0.2s ease !important;
+    }
+    
+    .ai-chat__log::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(135deg, rgba(37, 99, 235, 1), rgba(124, 58, 237, 1)) !important;
+    }
+    
+    /* Для Firefox */
+    .ai-chat__log {
+      scrollbar-width: thin !important;
+      scrollbar-color: rgba(37, 99, 235, 0.8) rgba(255, 255, 255, 0.05) !important;
+    }
+    
+    /* Стилизация скроллбара для ИИ-чата */
+    .ai-chat__log::-webkit-scrollbar {
+      width: 6px !important;
+    }
+    
+    .ai-chat__log::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05) !important;
+      border-radius: 10px !important;
+    }
+    
+    .ai-chat__log::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.8), rgba(124, 58, 237, 0.8)) !important;
+      border-radius: 10px !important;
+      transition: background 0.2s ease !important;
+    }
+    
+    .ai-chat__log::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(135deg, rgba(37, 99, 235, 1), rgba(124, 58, 237, 1)) !important;
+    }
+    
+    /* Для Firefox */
+    .ai-chat__log {
+      scrollbar-width: thin !important;
+      scrollbar-color: rgba(37, 99, 235, 0.8) rgba(255, 255, 255, 0.05) !important;
+    }
+    .ai-chat__message { padding: 10px 12px !important; border-radius: 14px !important; font-size: 13px !important; line-height: 1.4 !important; background: rgba(255, 255, 255, 0.06) !important; }
+    .ai-chat__message--user { background: rgba(59, 130, 246, 0.2) !important; align-self: flex-end !important; }
+    .ai-chat__form { display: flex !important; gap: 8px !important; }
+    .ai-chat__input { flex: 1 !important; resize: none !important; border: none !important; border-radius: 12px !important; padding: 10px 12px !important; font-size: 13px !important; font-family: inherit !important; background: rgba(255, 255, 255, 0.08) !important; color: #f0f4ff !important; min-height: 42px !important; outline: none !important; }
+    .ai-chat__input::placeholder { color: rgba(255, 255, 255, 0.4) !important; }
+    .ai-chat__send { border: none !important; border-radius: 12px !important; padding: 0 14px !important; background: linear-gradient(135deg, #2563eb, #7c3aed) !important; color: white !important; font-weight: 600 !important; cursor: pointer !important; transition: opacity 0.2s ease !important; }
+    .ai-chat__send:disabled { opacity: 0.5 !important; cursor: not-allowed !important; }
+    .ai-chat__toggle { background: rgba(255, 255, 255, 0.1) !important; border: none !important; color: rgba(255, 255, 255, 0.9) !important; font-size: 20px !important; cursor: pointer !important; padding: 8px !important; border-radius: 8px !important; transition: background 0.2s ease !important; width: 36px !important; height: 36px !important; display: flex !important; align-items: center !important; justify-content: center !important; }
+    .ai-chat__toggle:hover { background: rgba(255, 255, 255, 0.15) !important; }
+    .ai-chat__rag-toggle { display: flex !important; align-items: center !important; gap: 6px !important; cursor: pointer !important; user-select: none !important; }
+    .ai-chat__rag-label { font-size: 11px !important; color: rgba(255, 255, 255, 0.7) !important; font-weight: 500 !important; }
+    .ai-chat__rag-slider { position: relative !important; width: 36px !important; height: 20px !important; background: rgba(255, 255, 255, 0.2) !important; border-radius: 10px !important; transition: background 0.3s ease !important; }
+    .ai-chat__rag-slider::before { content: '' !important; position: absolute !important; top: 2px !important; left: 2px !important; width: 16px !important; height: 16px !important; background: white !important; border-radius: 50% !important; transition: transform 0.3s ease !important; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important; }
+    #ai-chat-rag-toggle:checked + .ai-chat__rag-slider { background: linear-gradient(135deg, #22c55e, #16a34a) !important; }
+    #ai-chat-rag-toggle:checked + .ai-chat__rag-slider::before { transform: translateX(16px) !important; }
+    #ai-chat-rag-toggle:checked ~ .ai-chat__rag-label { color: #34d399 !important; }
+    .ai-chat__body { display: flex !important; flex-direction: column !important; gap: 10px !important; min-height: 200px !important; }
+    .ai-chat__open-btn { position: fixed !important; left: 0 !important; top: 50% !important; transform: translateY(-50%) !important; width: 48px !important; height: 80px !important; background: linear-gradient(135deg, rgba(37, 99, 235, 0.9), rgba(124, 58, 237, 0.9)) !important; border: none !important; border-radius: 0 12px 12px 0 !important; color: white !important; font-size: 24px !important; cursor: pointer !important; z-index: 998 !important; display: flex !important; align-items: center !important; justify-content: center !important; box-shadow: 2px 0 20px rgba(0, 0, 0, 0.3) !important; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease !important; backdrop-filter: blur(10px) !important; }
+    .ai-chat__open-btn:hover { transform: translateY(-50%) translateX(4px) !important; box-shadow: 4px 0 24px rgba(0, 0, 0, 0.4) !important; }
+    .ai-chat__open-btn--hidden { opacity: 0 !important; pointer-events: none !important; }
+    .ai-chat__buttons { margin-top: 8px !important; display: flex !important; gap: 8px !important; }
+    .ai-chat__button { padding: 6px 12px !important; border-radius: 8px !important; border: none !important; cursor: pointer !important; font-weight: 600 !important; font-size: 12px !important; transition: opacity 0.2s ease, transform 0.2s ease !important; }
+    .ai-chat__button:hover { opacity: 0.9 !important; transform: translateY(-1px) !important; }
+    .ai-notification { position: fixed !important; left: 20px !important; bottom: 400px !important; width: 280px !important; padding: 16px 20px !important; border-radius: 16px !important; background: linear-gradient(135deg, rgba(37, 99, 235, 0.95), rgba(124, 58, 237, 0.95)) !important; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important; backdrop-filter: blur(12px) !important; color: white !important; font-family: 'Inter', system-ui, sans-serif !important; z-index: 1000 !important; display: flex !important; align-items: center !important; gap: 12px !important; cursor: pointer !important; transform: translateX(-120%) !important; opacity: 0 !important; transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease !important; border: 1px solid rgba(255, 255, 255, 0.2) !important; }
+    .ai-notification--visible { transform: translateX(0) !important; opacity: 1 !important; }
+    .ai-notification__icon { font-size: 24px !important; animation: bell-ring 0.5s ease-in-out !important; }
+    @keyframes bell-ring { 0%, 100% { transform: rotate(0deg); } 25% { transform: rotate(-15deg); } 75% { transform: rotate(15deg); } }
+    .ai-notification__text { font-weight: 600 !important; font-size: 14px !important; letter-spacing: 0.02em !important; }
+    .ai-notification:hover { transform: translateX(0) scale(1.02) !important; box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5) !important; }
+    @media (max-width: 768px) {
+      .ai-chat { width: 85vw !important; max-width: 320px !important; padding: 12px !important; gap: 8px !important; }
+      .ai-chat__title { font-size: 14px !important; }
+      .ai-chat__badge { font-size: 10px !important; padding: 2px 6px !important; }
+      .ai-chat__message { padding: 8px 10px !important; font-size: 12px !important; }
+      .ai-chat__input { font-size: 12px !important; padding: 8px 10px !important; min-height: 36px !important; }
+      .ai-chat__send { padding: 0 12px !important; font-size: 12px !important; }
+      .ai-chat__open-btn { width: 44px !important; height: 70px !important; font-size: 22px !important; border-radius: 0 14px 14px 0 !important; box-shadow: 3px 0 24px rgba(0, 0, 0, 0.4) !important; }
+      .ai-chat__open-btn:hover { transform: translateY(-50%) translateX(6px) !important; }
+      .ai-notification { width: calc(100% - 32px) !important; left: 16px !important; bottom: 300px !important; }
+    }
+  </style>
+  
+  
+</head>
+
+<body>
+  <main>
+    <!-- Параллакс-сцена -->
+    <section class="parallax" id="parallax">
+      <div class="parallax-stick">
+        <img class="bg-img" src="media/fon0.jpg" alt="Горы и город" aria-hidden="true">
+        <img class="mid-img" src="media/fon0.5.png" alt="Средний план города" aria-hidden="true">
+        <div class="mid-gradient" aria-hidden="true"></div>
+        <img class="top-img" src="media/fon1.png" alt="Передний слой" aria-hidden="true">
+        <div class="overlay">
+        </div>
+      </div>
+    </section>
+    <div class="after-parallax"></div>
+    <!-- Боковые стены для визуального эффекта -->
+    <div class="walls" aria-hidden="true">
+      <div class="wall wall-left"></div>
+      <div class="wall wall-right"></div>
+    </div>
+
+    <!-- Разделитель между параллаксом и этажами -->
+    <div class="divider wall-state" data-floor="6-5">
+      <div class="fc-line" aria-hidden="true"></div>
+      <div class="pol-potolok" aria-hidden="true"></div>
+    </div>
+
+    <!-- Этаж 6: Главный дашборд -->
+    <section class="floor" style="--hue: 210;">
+      <div class="cover" aria-hidden="true"></div>
+      <div class="content dashboard-grid">
+        <div class="dash-card">
+          <img src="media/dashboard/schedule.png" alt="Расписание">
+          <div class="dash-info">
+            <h3>Расписание</h3>
+            <a class="btn" href="pages/floor-6.html?page=schedule">Открыть</a>
+          </div>
+        </div>
+
+        <div class="dash-card">
+          <img src="media/dashboard/disciplines.png" alt="Мои дисциплины">
+          <div class="dash-info">
+            <h3>Мои дисциплины</h3>
+            <a class="btn" href="pages/floor-6.html?page=subjects">Открыть</a>
+          </div>
+        </div>
+
+        <div class="dash-card">
+          <img src="media/dashboard/tasks.png" alt="Задания">
+          <div class="dash-info">
+            <h3>Задания</h3>
+            <a class="btn" href="pages/floor-6.html?page=tasks">Открыть</a>
+          </div>
+        </div>
+
+        <div class="dash-card">
+          <img src="media/dashboard/courses.png" alt="Онлайн-курсы">
+          <div class="dash-info">
+            <h3>Онлайн-курсы</h3>
+            <a class="btn" href="pages/floor-6.html?page=courses">Открыть</a>
+          </div>
+        </div>
+
+        <div class="dash-card">
+          <img src="media/dashboard/tests.png" alt="Тестирование и контроли">
+          <div class="dash-info">
+            <h3>Тестирование и контроли</h3>
+            <a class="btn" href="pages/floor-6.html?page=tests">Открыть</a>
+          </div>
+        </div>
+
+        <div class="dash-card">
+          <img src="media/dashboard/grades.png" alt="Журнал оценок">
+          <div class="dash-info">
+            <h3>Журнал оценок</h3>
+            <a class="btn" href="pages/floor-6.html?page=grades">Открыть</a>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Разделитель между этажами 6 и 5 -->
+    <div class="divider wall-state" data-floor="6-5">
+      <div class="fc-line" aria-hidden="true"></div>
+      <div class="pol-potolok" aria-hidden="true"></div>
+    </div>
+    
+    <!-- Этаж 5: Новости и новости -->
+    <section class="floor floor-news" style="--hue: 200;">
+      <div class="cover" aria-hidden="true"></div>
+      <div class="content news-content">
+        <h2 class="news-title">Новости и события АТУ</h2>
+        <div class="news-grid">
+          <article class="news-card">
+            <h3>Актуальные</h3>
+            <p>Последние новости университета и кампуса</p>
+            <a class="btn" href="pages/floor-5.html">Открыть</a>
+          </article>
+
+          <article class="news-card">
+            <h3>Анонсы мероприятий</h3>
+            <p>Будущие конференции, встречи и мастер-классы</p>
+            <a class="btn" href="pages/floor-5.html">Подробнее</a>
+          </article>
+
+          <article class="news-card">
+            <h3>Объявления</h3>
+            <p>Информация для студентов и преподавателей</p>
+            <a class="btn" href="pages/floor-5.html">Посмотреть</a>
+          </article>
+        </div>
+      </div>
+    </section>
+    <!-- Разделитель между этажами 5 и 4 -->
+    <div class="divider wall-state" data-floor="5-4">
+      <div class="fc-line" aria-hidden="true"></div>
+      <div class="pol-potolok" aria-hidden="true"></div>
+    </div>
+    
+    <!-- Этаж 4: Библиотека -->
+    <section class="floor floor-4" style="--hue: 190;">
+      <div class="cover" aria-hidden="true"></div>
+      <div class="content">
+        <article class="floor-card" style="background-image: url('media/bookshelve.png'); background-size: cover; background-position: center;">
+          <h3>Библиотека</h3>
+          <p>Научная библиотека АТУ</p>
+          <div class="library-buttons">
+            <div class="library-left">
+              <a class="btn" href="pages/floor-4.html#base">Научная база</a>
+              <a class="btn" href="pages/floor-4.html#library">Библиотека</a>
+              <a class="btn" href="pages/floor-4.html#resources">Электронные ресурсы</a>
+            </div>
+            <div class="library-right">
+              <a class="btn" href="pages/floor-4.html#recommend">Рекомендации</a>
+              <a class="btn" href="pages/floor-4.html#links">Полезные ссылки</a>
+              <a class="btn" href="pages/floor-4.html#faq">FAQ</a>
+              <a class="btn" href="pages/floor-4.html#contacts">Контакты</a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+    <!-- Разделитель между этажами 4 и 3 -->
+    <div class="divider wall-state" data-floor="4-3">
+      <div class="fc-line" aria-hidden="true"></div>
+      <div class="pol-potolok" aria-hidden="true"></div>
+    </div>
+    
+    <!-- Этаж 3: Учебный план -->
+    <section class="floor floor-3" style="--hue: 180;">
+      <div class="cover" aria-hidden="true"></div>
+      <div class="content">
+        <article class="floor-card">
+          <h3>Учебный план</h3>
+          <p>Учебный план по образовательной программе <span id="program-name">(название программы)</span></p>
+          <a class="btn" href="pages/floor-3.html">Открыть</a>
+        </article>
+      </div>
+    </section>
+    
+    <!-- Разделитель между этажами 3 и 2 -->
+    <div class="divider wall-state" data-floor="3-2">
+      <div class="fc-line" aria-hidden="true"></div>
+      <div class="pol-potolok" aria-hidden="true"></div>
+    </div>
+    
+    <!-- Этаж 2: Эдвайзер -->
+    <section class="floor floor-2" style="--hue: 170;">
+      <div class="cover" aria-hidden="true"></div>
+      <div class="content">
+        <article class="floor-card">
+          <h3>Мой Эдвайзер</h3>
+          <p id="edviser-name">(имя эдвайзера)</p>
+          <a class="btn" href="pages/floor-2.html">Открыть</a>
+        </article>
+      </div>
+    </section>
+    
+    <!-- Разделитель между этажами 2 и 1 -->
+    <div class="divider wall-state" data-floor="2-1">
+      <div class="fc-line" aria-hidden="true"></div>
+      <div class="pol-potolok" aria-hidden="true"></div>
+    </div>
+    
+    <!-- Этаж 1: Профиль пользователя -->
+    <section class="floor floor-1" style="--hue: 160;">
+      <div class="cover" aria-hidden="true"></div>
+      <div class="content">
+        <article class="floor-card">
+          <h3>Настройки профиля</h3>
+          <div class="profile-row">
+            <div class="profile-info">
+              <p id="user-name">(имя пользователя)</p>
+              <p id="group-name">(группа пользователя)</p>
+              <p id="program-name">(название программы)</p>
+              <div class="profile-actions">
+                <a class="btn" href="pages/floor-1.html" id="profile-action">Настройки профиля</a>
+                <button class="btn" id="exit-profile">Выйти</button>
+              </div>
+            </div>
+            <div class="profile-photo">
+              <div id="img-user" style="background-image: url('media/logo-atupng.png');"></div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Финальный разделитель этажей *пол этажа-->
+    <div class="divider wall-state" data-floor="1-0">
+      <div class="fc-line" aria-hidden="true"></div>
+      <div class="pol-potolok" aria-hidden="true"></div>
+    </div>
+
+    <!-- Лифт (временно 2D, 3D лифт не нашел)-->
+    <div class="elevator" aria-hidden="false">
+      <button class="elev-btn elev-up" aria-label="Этаж выше">▲</button>
+      <div class="elev-indicator">
+        <span class="elev-floor-label">название этажа</span>
+        <span class="elev-floor-num" id="elev-floor">6</span>
+      </div>
+      <div class="elev-list">
+        <button class="elev-jump" data-floor="0">6</button>
+        <button class="elev-jump" data-floor="1">5</button>
+        <button class="elev-jump" data-floor="2">4</button>
+        <button class="elev-jump" data-floor="3">3</button>
+        <button class="elev-jump" data-floor="4">2</button>
+        <button class="elev-jump" data-floor="5">1</button>
+      </div>
+      <button class="elev-btn elev-down" aria-label="Этаж ниже">▼</button>
+    </div>
+
+    <!-- Модальное окно авторизации -->
+    <div class="toast-auth" role="dialog" aria-live="polite" aria-atomic="true" aria-modal="true">
+      <div class="toast-auth__content">
+        <div class="toast-auth__title">Вход в систему</div>
+        <form id="toast-login" class="toast-auth__form">
+          <input type="text" id="toast-user" placeholder="Логин" required>
+          <input type="password" id="toast-pass" placeholder="Пароль" required>
+          <label class="toast-file">
+            <input type="file" id="toast-photo" accept="image/*">
+            <span>Фото (необязательно)</span>
+          </label>
+          <button type="submit" class="toast-auth__btn">Воти</button>
+        </form>
+      </div>
+    </div>
+
+    <button class="ai-chat__open-btn ai-chat__open-btn--hidden" type="button" aria-label="Открыть ИИ чат" id="ai-chat-open-btn">💬</button>
+    
+    <section class="ai-chat ai-chat--hidden" aria-live="polite" aria-label="ИИ чат АТУ">
+      <div class="ai-chat__header">
+        <div>
+          <div class="ai-chat__title">ИИ-помощник АТУ</div>
+          <div class="ai-chat__badge" id="ai-chat-model-label">WebLLM • Phi-2</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <label class="ai-chat__rag-toggle" title="Включить RAG и бота">
+            <input type="checkbox" id="ai-chat-rag-toggle" checked style="display: none;">
+            <span class="ai-chat__rag-slider"></span>
+            <span class="ai-chat__rag-label">RAG</span>
+          </label>
+          <button class="ai-chat__toggle" type="button" aria-label="Закрыть чат" id="ai-chat-close-btn">✕</button>
+        </div>
+      </div>
+      <div class="ai-chat__body">
+        <div class="ai-chat__status" id="ai-chat-status">Готовлю контекст...</div>
+        <div class="ai-chat__log" id="ai-chat-log"></div>
+        <form class="ai-chat__form" id="ai-chat-form">
+          <textarea class="ai-chat__input" id="ai-chat-input" placeholder="Спросите про этажи, расписание... Команды: /profile, /dashboard, /library" rows="2"></textarea>
+          <button class="ai-chat__send" type="submit" disabled>Спросить</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" crossorigin>
+    import { pipeline, env } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2';
+    env.allowLocalModels = false;
+    env.allowRemoteModels = true;
+    window.transformers = { pipeline };
+    console.log('Transformers loaded:', typeof pipeline);
+  </script>
+  <script type="module" crossorigin>
+    // Используем старую версию с CreateEngine API (как в оригинальном коде)
+    (async () => {
+      try {
+        console.log('📦 Loading WebLLM 0.2.36...');
+        const webllm = await import('https://esm.run/@mlc-ai/web-llm@0.2.36');
+        console.log('✅ WebLLM module loaded');
+        window.webllm = webllm;
+        window.MLCEngine = webllm.MLCEngine;
+        window.CreateEngine = webllm.CreateEngine;
+        console.log('WebLLM 0.2.36 loaded:', {
+          MLCEngine: typeof webllm.MLCEngine,
+          CreateEngine: typeof webllm.CreateEngine,
+          prebuiltAppConfig: !!webllm.prebuiltAppConfig
+        });
+      } catch (err) {
+        console.error('❌ Failed to load WebLLM:', err);
+        window.webllm = null;
+        window.MLCEngine = null;
+        window.CreateEngine = null;
+      }
+    })();
+  </script>
+<script src="js/bd.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/page.js"></script>
+  <script src="js/webllm/neirochat.js" defer></script>
+  <!-- ИИ-чат код вынесен в js/webllm/neirochat.js -->
+</body>
+</html>
+
+
+
+

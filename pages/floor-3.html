@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Учебный план — ATU</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../page.css">
+  <style>
+    :root {
+      --brand: hsl(180, 80%, 45%);
+      --brand-dark: hsl(180, 65%, 30%);
+      --bg: #f5f8fa;
+      --card: #ffffff;
+      --text: #1a1a1a;
+      --muted: #6b7280;
+      --radius: 14px;
+      --shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    body {
+      margin: 0;
+      font-family: "Inter", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      text-align: center;
+      padding: 2.5rem 1rem 1rem;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      color: var(--brand-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    header p {
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 1.2rem 3rem;
+    }
+
+    select {
+      display: block;
+      margin: 2rem auto 0;
+      padding: 0.8rem 1rem;
+      font-size: 1rem;
+      border: 1px solid #cfd4d9;
+      border-radius: var(--radius);
+      background: white;
+      width: 100%;
+      max-width: 450px;
+      box-shadow: var(--shadow);
+      transition: border 0.2s ease;
+    }
+
+    select:focus {
+      border-color: var(--brand);
+      outline: none;
+    }
+
+    .plan-section {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      margin-top: 2rem;
+      animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(10px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    .plan-section h2 {
+      color: var(--brand-dark);
+      margin-bottom: 0.3rem;
+    }
+
+    .plan-section p {
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+
+    th, td {
+      border: 1px solid #d5dadd;
+      padding: 0.7rem 1rem;
+      text-align: left;
+    }
+
+    th {
+      background: var(--brand);
+      color: white;
+      font-weight: 600;
+    }
+
+    tr:nth-child(even) td {
+      background: #f9fafb;
+    }
+
+    .no-data {
+      text-align: center;
+      color: var(--muted);
+      margin-top: 1rem;
+      font-style: italic;
+    }
+
+    a.btn {
+      display: inline-block;
+      margin-top: 2rem;
+      background: var(--brand);
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background 0.3s ease;
+    }
+
+    a.btn:hover {
+      background: var(--brand-dark);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Учебный план</h1>
+    <p>Выберите образовательную программу, чтобы посмотреть дисциплины</p>
+  </header>
+
+  <div class="container">
+    <select id="program-select">
+      <option value="">— Выберите программу —</option>
+      <option value="6B06103">Программная инженерия</option>
+      <option value="6B06101">Информационные системы</option>
+      <option value="6B06102">Вычислительная техника и ПО</option>
+      <option value="6B04102">Менеджмент</option>
+      <option value="6B07201">Технология продовольственных продуктов</option>
+    </select>
+
+    <div id="plan-container" class="plan-section" style="display:none;">
+      <h2 id="prog-title"></h2>
+      <p id="prog-desc"></p>
+      <table id="plan-table">
+        <thead>
+          <tr>
+            <th>Семестр</th>
+            <th>Дисциплины / Модули</th>
+            <th>Кредиты</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <div id="no-data" class="no-data" style="display:none;">Учебный план пока недоступен</div>
+      <a href="../index.html" class="btn">← На главную</a>
+    </div>
+  </div>
+
+  <script>
+    const PROGRAMS = {
+      "6B06103": {
+        title: "Программная инженерия (6B06103)",
+        desc: "Подготовка специалистов, способных проектировать, реализовывать и сопровождать программные системы различного уровня сложности.",
+        plan: [
+          {sem: 1, subj: "Математика I, Введение в программирование, Физика", cred: 15},
+          {sem: 2, subj: "Математика II, Алгоритмы и структуры данных, Дискретная математика", cred: 16},
+          {sem: 3, subj: "Базы данных, Объектно-ориентированное программирование, Сетевые технологии", cred: 17},
+          {sem: 4, subj: "Инженерия ПО, WEB-разработка, Операционные системы", cred: 16},
+          {sem: 5, subj: "Мобильная разработка, Компьютерная безопасность, Тестирование", cred: 15}
+        ]
+      },
+      "6B06101": {
+        title: "Информационные системы (6B06101)",
+        desc: "Программа направлена на подготовку аналитиков и архитекторов информационных систем предприятий.",
+        plan: [
+          {sem: 1, subj: "Математика I, Основы ИКТ, Английский язык", cred: 14},
+          {sem: 2, subj: "Математика II, Программирование, Статистика", cred: 15},
+          {sem: 3, subj: "Базы данных, Системный анализ, Информационная безопасность", cred: 17}
+        ]
+      },
+      "6B06102": {
+        title: "Вычислительная техника и ПО (6B06102)",
+        desc: "Подготовка специалистов по аппаратному и программному обеспечению вычислительных систем.",
+        plan: [
+          {sem: 1, subj: "Информатика, Математика I, Электротехника", cred: 14},
+          {sem: 2, subj: "Математика II, Программирование, Цифровая схемотехника", cred: 15},
+          {sem: 3, subj: "Микропроцессорные системы, Архитектура ЭВМ, Операционные системы", cred: 17}
+        ]
+      },
+      "6B04102": {
+        title: "Менеджмент (6B04102)",
+        desc: "Подготовка специалистов в области управления, анализа и планирования деятельности предприятий.",
+        plan: [
+          {sem: 1, subj: "Основы экономики, Бизнес-коммуникации, История Казахстана", cred: 12},
+          {sem: 2, subj: "Финансовый учёт, Менеджмент, Математика для экономистов", cred: 14}
+        ]
+      },
+      "6B07201": {
+        title: "Технология продовольственных продуктов (6B07201)",
+        desc: "Подготовка инженеров по переработке и контролю качества пищевых продуктов.",
+        plan: [
+          {sem: 1, subj: "Химия, Математика, Физика", cred: 14},
+          {sem: 2, subj: "Микробиология, Технологические процессы, Материаловедение", cred: 15},
+          {sem: 3, subj: "Пищевая инженерия, Аналитическая химия, Экология", cred: 16}
+        ]
+      }
+    };
+
+    const select = document.getElementById("program-select");
+    const planContainer = document.getElementById("plan-container");
+    const title = document.getElementById("prog-title");
+    const desc = document.getElementById("prog-desc");
+    const tbody = document.querySelector("#plan-table tbody");
+    const noData = document.getElementById("no-data");
+
+    select.addEventListener("change", () => {
+      const val = select.value;
+      if (!val || !PROGRAMS[val]) {
+        planContainer.style.display = "none";
+        return;
+      }
+
+      const p = PROGRAMS[val];
+      planContainer.style.display = "block";
+      title.textContent = p.title;
+      desc.textContent = p.desc;
+      tbody.innerHTML = "";
+
+      if (p.plan && p.plan.length > 0) {
+        noData.style.display = "none";
+        p.plan.forEach(item => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `<td>${item.sem}</td><td>${item.subj}</td><td>${item.cred}</td>`;
+          tbody.appendChild(tr);
+        });
+      } else {
+        noData.style.display = "block";
+      }
+    });
+  </script>
+</body>
+</html>
